@@ -1,6 +1,5 @@
 package com.duoc.backend;
 
-import com.duoc.backend.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,15 +24,13 @@ class HttpRequestTest {
     void testLoginSuccess() {
         // Arrange
         String baseUrl = "http://localhost:" + port + "/login";
-        User loginRequest = new User();
-        loginRequest.setUsername("prueba");
-        loginRequest.setPassword("123456");
+        LoginRequestDTO loginRequest = new LoginRequestDTO("prueba", "123456");
 
-        System.out.println("LoginRequest: " + loginRequest.getUsername() + " " + loginRequest.getPassword());
+        System.out.println("LoginRequest: " + loginRequest.username());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<User> request = new HttpEntity<>(loginRequest, headers);
+        HttpEntity<LoginRequestDTO> request = new HttpEntity<>(loginRequest, headers);
         System.out.println("Request: " + request.getBody());
         // Act
         ResponseEntity<String> response = restTemplate.postForEntity(baseUrl, request, String.class);
@@ -51,13 +48,11 @@ class HttpRequestTest {
     void testLoginInvalidPassword() {
         // Arrange
         String baseUrl = "http://localhost:" + port + "/login";
-        User loginRequest = new User();
-        loginRequest.setUsername("prueba");
-        loginRequest.setPassword("1234567");
+        LoginRequestDTO loginRequest = new LoginRequestDTO("prueba", "1234567");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<User> request = new HttpEntity<>(loginRequest, headers);
+        HttpEntity<LoginRequestDTO> request = new HttpEntity<>(loginRequest, headers);
 
         // Act
         ResponseEntity<String> response = restTemplate.postForEntity(baseUrl, request, String.class);
