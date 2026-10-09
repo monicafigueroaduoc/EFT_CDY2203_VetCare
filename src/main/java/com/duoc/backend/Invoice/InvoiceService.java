@@ -33,8 +33,8 @@ public class InvoiceService {
     }
 
     public Invoice saveInvoice(InvoiceRequestDTO invoiceRequest) {
-        List<Long> medicationIds = invoiceRequest.getMedicationIds() == null ? List.of() : invoiceRequest.getMedicationIds();
-        List<Long> careIds = invoiceRequest.getCareIds() == null ? List.of() : invoiceRequest.getCareIds();
+        List<Long> medicationIds = invoiceRequest.medicationIds() == null ? List.of() : invoiceRequest.medicationIds();
+        List<Long> careIds = invoiceRequest.careIds() == null ? List.of() : invoiceRequest.careIds();
 
         List<Medication> validMedications = StreamSupport.stream(
                 medicationRepository.findAllById(medicationIds).spliterator(), false
@@ -55,8 +55,8 @@ public class InvoiceService {
         double totalCareCost = validCares.stream().mapToDouble(Care::getCost).sum();
         double totalMedicationCost = validMedications.stream().mapToDouble(Medication::getCost).sum();
 
-        Invoice invoice = new Invoice(null, invoiceRequest.getPatientName(), invoiceRequest.getDate(), validCares, validMedications);
-        invoice.setTime(invoiceRequest.getTime());
+        Invoice invoice = new Invoice(null, invoiceRequest.patientName(), invoiceRequest.date(), validCares, validMedications);
+        invoice.setTime(invoiceRequest.time());
         invoice.setTotalCost(totalCareCost + totalMedicationCost);
 
         return invoiceRepository.save(invoice);
