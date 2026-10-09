@@ -37,6 +37,9 @@ public class Invoice {
 
     private Double totalCost;
 
+    protected Invoice() {
+    }
+
     public Invoice(Long id, String patientName, LocalDate date, List<Care> cares, List<Medication> medications) {
         this.id = id;
         this.patientName = patientName;
