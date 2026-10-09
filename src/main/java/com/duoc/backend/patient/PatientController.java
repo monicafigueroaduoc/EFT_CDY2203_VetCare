@@ -36,8 +36,8 @@ public class PatientController {
     }
 
     @PostMapping
-    public Patient savePatient(@RequestBody Patient patient) {
-        return patientService.savePatient(patient);
+    public Patient savePatient(@RequestBody PatientRequestDTO patientRequest) {
+        return patientService.savePatient(patientRequest);
     }
 
     @DeleteMapping("/{id}")

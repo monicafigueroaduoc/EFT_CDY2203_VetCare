@@ -17,7 +17,13 @@ public class PatientService {
         return patientRepository.findById(id).orElse(null);
     }
 
-    public Patient savePatient(Patient patient) {
+    public Patient savePatient(PatientRequestDTO patientRequest) {
+        Patient patient = new Patient();
+        patient.setName(patientRequest.name());
+        patient.setSpecies(patientRequest.species());
+        patient.setBreed(patientRequest.breed());
+        patient.setAge(patientRequest.age());
+        patient.setOwner(patientRequest.owner());
         return patientRepository.save(patient);
     }
 
