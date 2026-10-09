@@ -23,8 +23,9 @@ public class CareController {
     }
 
     @PostMapping
-    public Care saveCare(@RequestBody Care service) {
-        return careRepository.save(service);
+    public Care saveCare(@RequestBody CareRequestDTO request) {
+        Care care = new Care(request.name(), request.cost());
+        return careRepository.save(care);
     }
 
     @DeleteMapping("/{id}")
