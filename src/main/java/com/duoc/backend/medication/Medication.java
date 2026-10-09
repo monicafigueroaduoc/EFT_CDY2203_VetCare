@@ -14,6 +14,9 @@ public class Medication {
     private Double cost;
 
 
+    protected Medication() {
+    }
+
     public Medication(String name, double price) {
         this.name = name;
         this.cost = price;
