@@ -20,7 +20,7 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @GetMapping("/register")
+    @GetMapping(value = "/register", produces = "text/plain")
     public String greetings(@RequestParam(value="name", defaultValue="World") String name) {
         return "Hello {" + name + "}";
     }
