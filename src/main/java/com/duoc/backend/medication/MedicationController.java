@@ -23,8 +23,8 @@ public class MedicationController {
     }
 
     @PostMapping
-    public Medication saveMedication(@RequestBody Medication medication) {
-        return medicationService.saveMedication(medication);
+    public Medication saveMedication(@RequestBody MedicationRequestDTO medicationRequest) {
+        return medicationService.saveMedication(medicationRequest);
     }
 
     @DeleteMapping("/{id}")

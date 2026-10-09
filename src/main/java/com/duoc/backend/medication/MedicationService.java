@@ -19,7 +19,8 @@ public class MedicationService {
         return medicationRepository.findById(id).orElse(null);
     }
 
-    public Medication saveMedication(Medication medication) {
+    public Medication saveMedication(MedicationRequestDTO medicationRequest) {
+        Medication medication = new Medication(medicationRequest.name(), medicationRequest.cost());
         return medicationRepository.save(medication);
     }
 

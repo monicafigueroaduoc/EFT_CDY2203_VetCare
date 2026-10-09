@@ -60,15 +60,18 @@ class MedicationServiceTest {
 
     @Test
     void testSaveMedication() {
-        Medication medication = new Medication("Antibiótico", 12000);
+        MedicationRequestDTO request = new MedicationRequestDTO("Antibiotico", 12000.0);
 
-        when(medicationRepository.save(medication))
-                .thenReturn(medication);
+        when(medicationRepository.save(any(Medication.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Medication resultado = medicationService.saveMedication(medication);
+        Medication resultado = medicationService.saveMedication(request);
 
-        assertSame(medication, resultado);
-        verify(medicationRepository).save(medication);
+        assertNotNull(resultado);
+        assertNull(resultado.getId());
+        assertEquals("Antibiotico", resultado.getName());
+        assertEquals(Double.valueOf(12000.0), resultado.getCost());
+        verify(medicationRepository).save(any(Medication.class));
     }
 
     @Test
