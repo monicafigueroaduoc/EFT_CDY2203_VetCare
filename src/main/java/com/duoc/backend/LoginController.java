@@ -31,8 +31,7 @@ public class LoginController {
             throw new RuntimeException("Invalid login");
         }
 
-        String token = jwtAuthtenticationConfig.getJWTToken(loginRequest.username());
-        return token;
+        return jwtAuthtenticationConfig.getJWTToken(loginRequest.username());
     }
 
 }
