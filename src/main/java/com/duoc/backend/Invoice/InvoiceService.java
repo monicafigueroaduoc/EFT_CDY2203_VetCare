@@ -32,42 +32,35 @@ public class InvoiceService {
         return invoiceRepository.findById(id).orElse(null);
     }
 
-    public Invoice saveInvoice(Invoice invoice) {
-        // Validar que los medicamentos existen
+    public Invoice saveInvoice(InvoiceRequestDTO invoiceRequest) {
+        List<Long> medicationIds = invoiceRequest.getMedicationIds() == null ? List.of() : invoiceRequest.getMedicationIds();
+        List<Long> careIds = invoiceRequest.getCareIds() == null ? List.of() : invoiceRequest.getCareIds();
+
         List<Medication> validMedications = StreamSupport.stream(
-                medicationRepository.findAllById(
-                        invoice.getMedications().stream().map(Medication::getId).collect(Collectors.toList())
-                ).spliterator(), false
+                medicationRepository.findAllById(medicationIds).spliterator(), false
         ).collect(Collectors.toList());
-        if (validMedications.size() != invoice.getMedications().size()) {
+
+        if (validMedications.size() != medicationIds.size()) {
             throw new IllegalArgumentException("Algunos medicamentos no existen en la base de datos.");
         }
 
-        // Validar que los servicios existen
         List<Care> validCares = StreamSupport.stream(
-                careRepository.findAllById(
-                        invoice.getCares().stream().map(Care::getId).collect(Collectors.toList())
-                ).spliterator(), false
+                careRepository.findAllById(careIds).spliterator(), false
         ).collect(Collectors.toList());
-        if (validCares.size() != invoice.getCares().size()) {
+
+        if (validCares.size() != careIds.size()) {
             throw new IllegalArgumentException("Algunos servicios no existen en la base de datos.");
         }
 
-        // Calcular el costo total basado en los servicios y medicamentos asociados
-        double totalCareCost = validCares.stream()
-                .mapToDouble(Care::getCost)
-                .sum();
+        double totalCareCost = validCares.stream().mapToDouble(Care::getCost).sum();
+        double totalMedicationCost = validMedications.stream().mapToDouble(Medication::getCost).sum();
 
-        double totalMedicationCost = validMedications.stream()
-                .mapToDouble(Medication::getCost)
-                .sum();
-
+        Invoice invoice = new Invoice(null, invoiceRequest.getPatientName(), invoiceRequest.getDate(), validCares, validMedications);
+        invoice.setTime(invoiceRequest.getTime());
         invoice.setTotalCost(totalCareCost + totalMedicationCost);
 
-        // Guardar la factura en el repositorio
         return invoiceRepository.save(invoice);
     }
-
     public void deleteInvoice(Long id) {
         invoiceRepository.deleteById(id);
     }

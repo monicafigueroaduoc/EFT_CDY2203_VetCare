@@ -36,8 +36,8 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public Invoice saveInvoice(@RequestBody Invoice invoice) {
-        return invoiceService.saveInvoice(invoice);
+    public Invoice saveInvoice(@RequestBody InvoiceRequestDTO invoiceRequest) {
+        return invoiceService.saveInvoice(invoiceRequest);
     }
 
     @DeleteMapping("/{id}")
