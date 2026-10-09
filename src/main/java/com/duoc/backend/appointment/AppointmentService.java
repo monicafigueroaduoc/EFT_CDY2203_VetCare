@@ -17,7 +17,12 @@ public class AppointmentService {
         return appointmentRepository.findById(id).orElse(null);
     }
 
-    public Appointment saveAppointment(Appointment appointment) {
+    public Appointment saveAppointment(AppointmentRequestDTO appointmentRequest) {
+        Appointment appointment = new Appointment();
+        appointment.setDate(appointmentRequest.date());
+        appointment.setTime(appointmentRequest.time());
+        appointment.setReason(appointmentRequest.reason());
+        appointment.setVeterinarian(appointmentRequest.veterinarian());
         return appointmentRepository.save(appointment);
     }
 

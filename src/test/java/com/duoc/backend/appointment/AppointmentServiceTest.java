@@ -3,6 +3,8 @@ package com.duoc.backend.appointment;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,15 +62,23 @@ class AppointmentServiceTest {
 
     @Test
     void testSaveAppointment() {
-        Appointment appointment = new Appointment();
+        LocalDate date = LocalDate.of(2026, 10, 9);
+        LocalTime time = LocalTime.of(10, 30);
+        AppointmentRequestDTO request = new AppointmentRequestDTO(
+                date, time, "Control", "Dr. Perez");
 
-        when(appointmentRepository.save(appointment))
-                .thenReturn(appointment);
+        when(appointmentRepository.save(any(Appointment.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Appointment resultado = appointmentService.saveAppointment(appointment);
+        Appointment resultado = appointmentService.saveAppointment(request);
 
-        assertSame(appointment, resultado);
-        verify(appointmentRepository).save(appointment);
+        assertNotNull(resultado);
+        assertNull(resultado.getId());
+        assertEquals(date, resultado.getDate());
+        assertEquals(time, resultado.getTime());
+        assertEquals("Control", resultado.getReason());
+        assertEquals("Dr. Perez", resultado.getVeterinarian());
+        verify(appointmentRepository).save(any(Appointment.class));
     }
 
     @Test

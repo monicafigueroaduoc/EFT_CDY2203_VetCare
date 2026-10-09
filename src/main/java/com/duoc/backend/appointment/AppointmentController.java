@@ -23,8 +23,8 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment saveAppointment(@RequestBody Appointment appointment) {
-        return appointmentService.saveAppointment(appointment);
+    public Appointment saveAppointment(@RequestBody AppointmentRequestDTO appointmentRequest) {
+        return appointmentService.saveAppointment(appointmentRequest);
     }
 
     @DeleteMapping("/{id}")
